@@ -9,39 +9,71 @@ class Online3DPackingDataGenerator:
         self.bin_W_range = [300,500]
         self.bin_H_range = [500,700]
         self.bin_L_range = [300,500]
-
+        self.bin_L =60 #X   #random.uniform(self.bin_L_range[0],self.bin_L_range[1])
+        self.bin_W =50 #Y   #random.uniform(self.bin_W_range[0],self.bin_W_range[1])
+        self.bin_H =40 #Z   #random.uniform(self.bin_H_range[0],self.bin_H_range[1])
+         
+        self.item_L_range = [self.bin_L_range[0]*0.05,self.bin_L_range[1]*0.3]
         self.item_W_range = [self.bin_W_range[0]*0.05,self.bin_W_range[1]*0.3]
         self.item_H_range = [self.bin_H_range[0]*0.05,self.bin_H_range[1]*0.3]
-        self.item_L_range = [self.bin_L_range[0]*0.05,self.bin_L_range[1]*0.3]
+        
+        self.item_min_dim=5
+        self.item_max_dim=20
 
         self.packer=None
     def generate_data(self):
         self.packer = Packer()
-        bin_W =60#random.uniform(self.bin_W_range[0],self.bin_W_range[1])
-        bin_H =40#random.uniform(self.bin_H_range[0],self.bin_H_range[1])
-        bin_L =40#random.uniform(self.bin_L_range[0],self.bin_L_range[1])
-        bin_volume=bin_W*bin_H*bin_L
-        self.packer.add_bin(Bin('FirstBin', bin_W, bin_H, bin_L , 1))
+       
+        bin_volume=self.bin_W*self.bin_H*self.bin_L
+        self.packer.add_bin(Bin('Bin',self.bin_L , self.bin_W, self.bin_H,  1))
 
         current_volume=0
         index=0
         while (current_volume<bin_volume): 
             index+=1
-            item_W =random.randint(10,20)#random.uniform(self.item_W_range[0],self.item_W_range[1])
-            item_H =random.randint(10,20)#random.uniform(self.item_H_range[0],self.item_H_range[1])
-            item_L =random.randint(10,20)#random.uniform(self.item_L_range[0],self.item_L_range[1])
+            item_W =random.randint(self.item_min_dim,self.item_max_dim)
+            item_H =random.randint(self.item_min_dim,self.item_max_dim)
+            item_L =random.randint(self.item_min_dim,self.item_max_dim)
             current_volume+=item_W*item_H*item_L
             self.packer.add_item(Item('Item '+str(index), item_W, item_H, item_L, 0))
         
         self.packer.pack()
 
         item_list=[]
-        for b in self.packer.bins:
+        if (len(self.packer.bins)>0):
+        #for b in self.packer.bins:
+            b=self.packer.bins[0]
+            print("================================================================================")
+            print("number of items:",len(b.items))
+            print("number of unplaced_items:",len(b.unplaced_items))
+            print("number of unfitted_items:",len(b.unfitted_items))
+
+            Zero_items=[item for item in b.items if (item.position[0]+item.position[1]+item.position[2]<=0.00001)]
+            other_items=[item for item in b.items if (item.position[0]+item.position[1]+item.position[2]>0.00001)]
+            b.items =[]
+            if len(Zero_items)>0:
+                b.items.append(Zero_items[0])
+                Zero_items.pop(0)
+            b.items.extend(other_items)
+            b.unfitted_items.extend(Zero_items)
+ 
+            print("AFTER number of items:",len(b.items))
+            print("AFTER number of unplaced_items:",len(b.unplaced_items))
+            print("AFTER number of unfitted_items:",len(b.unfitted_items))
+
+            #SORT ITEMS BY Z POSITION
+            b.items.sort(key=lambda x: (x.position[2],x.position[0]+x.position[1]), reverse=False) 
+
+            #extend dimension
+            for item in b.items:
+                item.length, item.width, item.height =item.get_dimension()
+                item.rotation_type=0
+
             #draw bin origin
             bin_origin=o3d.geometry.TriangleMesh.create_coordinate_frame(size=10.0, origin= [0., 0., 0.] )
             item_list.append(bin_origin)
             print(":::::::::::", b.string()) 
-            mesh_bin = self.create_mesh_box(width = b.width, height = b.height, depth = b.depth)#, dx=b.position[0], dy=b.position[1], dz=b.position[2])#position
+            mesh_bin = self.create_mesh_box(width = b.length, height = b.width, depth = b.height)#, dx=b.position[0], dy=b.position[1], dz=b.position[2])#position
             mesh_bin.compute_vertex_normals()
             mesh_bin.paint_uniform_color([random.uniform(0,1), random.uniform(0,1), random.uniform(0,1)])
             lineset_bin=o3d.geometry.LineSet.create_from_triangle_mesh(mesh_bin)
@@ -52,14 +84,14 @@ class Online3DPackingDataGenerator:
                 dim=item.get_dimension()
                 mesh_box = self.create_mesh_box(width = dim[0], height = dim[1], depth = dim[2], dx=item.position[0], dy=item.position[1], dz=item.position[2])#position
                 mesh_box.compute_vertex_normals()
-                mesh_box.paint_uniform_color([random.uniform(0,1), random.uniform(0,1), random.uniform(0,1)])
+                mesh_box.paint_uniform_color([random.uniform(0.2,0.8), random.uniform(0.2,0.8), random.uniform(0.2,0.8)])
                 item_list.append(mesh_box)
             print("UNFITTED ITEMS:")
             for item in b.unfitted_items:
                 print("====> ", item.string())
 
             print("***************************************************")
-            print("***************************************************")
+            print("***************************************************") 
         
         o3d.visualization.draw_geometries(item_list)
 
