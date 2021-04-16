@@ -37,7 +37,10 @@ class Online3DPackingDataGenerator:
 
         item_list=[]
         for b in self.packer.bins:
-            print(":::::::::::", b.string())
+            #draw bin origin
+            bin_origin=o3d.geometry.TriangleMesh.create_coordinate_frame(size=10.0, origin= [0., 0., 0.] )
+            item_list.append(bin_origin)
+            print(":::::::::::", b.string()) 
             mesh_bin = self.create_mesh_box(width = b.width, height = b.height, depth = b.depth)#, dx=b.position[0], dy=b.position[1], dz=b.position[2])#position
             mesh_bin.compute_vertex_normals()
             mesh_bin.paint_uniform_color([random.uniform(0,1), random.uniform(0,1), random.uniform(0,1)])
@@ -46,7 +49,8 @@ class Online3DPackingDataGenerator:
             print("FITTED ITEMS:")
             for item in b.items:
                 print("====> ", item.string())
-                mesh_box = self.create_mesh_box(width = item.width, height = item.height, depth = item.depth, dx=item.position[0], dy=item.position[1], dz=item.position[2])#position
+                dim=item.get_dimension()
+                mesh_box = self.create_mesh_box(width = dim[0], height = dim[1], depth = dim[2], dx=item.position[0], dy=item.position[1], dz=item.position[2])#position
                 mesh_box.compute_vertex_normals()
                 mesh_box.paint_uniform_color([random.uniform(0,1), random.uniform(0,1), random.uniform(0,1)])
                 item_list.append(mesh_box)
