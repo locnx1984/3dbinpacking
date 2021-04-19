@@ -1,17 +1,19 @@
+# length in x-axis; width in y-axis; height in z-axis
 class RotationType:
-    RT_WHD = 0
-    RT_HWD = 1
-    RT_HDW = 2
-    RT_DHW = 3
-    RT_DWH = 4
-    RT_WDH = 5
+    RT_LWH = 0
+    RT_HLW = 1
+    RT_HWL = 2
+    RT_WHL = 3
+    RT_WLH = 4
+    RT_LHW = 5
+    
+    ALL = [RT_LWH, RT_HLW, RT_HWL, RT_WHL, RT_WLH, RT_LHW]
 
-    ALL = [RT_WHD, RT_HWD, RT_HDW, RT_DHW, RT_DWH, RT_WDH]
 
-
+# (x, y, z) --> (length, width, height)
 class Axis:
-    WIDTH = 0
-    HEIGHT = 1
-    DEPTH = 2
-
-    ALL = [WIDTH, HEIGHT, DEPTH]
+    LENGTH = 0
+    WIDTH = 1
+    HEIGHT = 2
+    
+    ALL = [LENGTH, WIDTH, HEIGHT]
