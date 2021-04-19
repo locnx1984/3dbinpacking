@@ -23,16 +23,16 @@ from .constants import Axis
 import time
 
 class Online3DPackingDataGenerator:
-    def __init__(self):
+    def __init__(self,_bin_L =60 ,_bin_W =50 ,_bin_H =40,_item_min_dim=5,_item_max_dim=25):
          
         #Bin Dimension
-        self.bin_L =60 #X   #random.uniform(self.bin_L_range[0],self.bin_L_range[1])
-        self.bin_W =50 #Y   #random.uniform(self.bin_W_range[0],self.bin_W_range[1])
-        self.bin_H =40 #Z   #random.uniform(self.bin_H_range[0],self.bin_H_range[1])
+        self.bin_L =_bin_L #X   
+        self.bin_W =_bin_W #Y    
+        self.bin_H =_bin_H #Z   
         
         #Item dimension range
-        self.item_min_dim=5
-        self.item_max_dim=25
+        self.item_min_dim=_item_min_dim
+        self.item_max_dim=_item_max_dim
 
         #packing result
         self.packer=None
@@ -195,7 +195,7 @@ class Online3DPackingDataGenerator:
     def generate_data_test(self,folder_name=""):
          
         print("generate training data...")
-        
+
     def display_current_result(self):
         #draw bin origin 
         self.item_list=[]
