@@ -1,5 +1,6 @@
 3D Bin Packing
 ====
+Adding codes from 2014 paper https://github.com/Janet-19/3d-bin-packing-problem
 
 3D Bin Packing implementation based on [this paper](erick_dube_507-034.pdf). The code is based on [gedex](https://github.com/gedex/bp3d) implementation in Go.
 
