@@ -20,7 +20,7 @@ class Online3DPackingDataGenerator:
         # self.item_H_range = [self.bin_H_range[0]*0.05,self.bin_H_range[1]*0.3]
         
         self.item_min_dim=5
-        self.item_max_dim=20
+        self.item_max_dim=25
 
         self.packer=None
         self.vis=None
@@ -67,15 +67,15 @@ class Online3DPackingDataGenerator:
             print("AFTER number of unfitted_items:",len(b.unfitted_items))
 
             #SORT ITEMS BY Z POSITION then by X+Y
-            b.items.sort(key=lambda x: (x.position[2],x.position[0]+x.position[1]), reverse=False) 
-            #b.items.sort(key=lambda x: (x.position[2]*2+x.position[0]+x.position[1]), reverse=False) 
-            #extend dimension
-            start=time.time()
-            print("Extending dimension...")
-
             for item in b.items:
                 item.length, item.width, item.height =item.get_dimension()
                 item.rotation_type=0
+
+            b.items.sort(key=lambda x: (x.position[2]+ item.height,x.position[0]+x.position[1]), reverse=False) 
+            #b.items.sort(key=lambda x: (x.position[2]*2+x.position[0]+x.position[1]), reverse=False) 
+            #extend dimension
+            start=time.time()
+            print("Extending dimension...") 
 
             for i in range(len(b.items)):
                 item1=b.items[i]
