@@ -145,34 +145,30 @@ class Online3DPackingDataGenerator:
         print("***************************************************") 
          
     def pre_box_callback(self,vis):
-        self.box_id=((self.box_id-1+len(self.item_list))%len(self.item_list))
-        #skip 2 drawing components
-        if (self.box_id<2):
-            self.box_id+=2
+        self.box_id=((self.box_id-1+len(self.online_items))%len(self.online_items))
+        
         self.vis.clear_geometries()
         self.vis.add_geometry(self.item_list[0])
         self.vis.add_geometry(self.item_list[1])
-        for id in range(2,self.box_id+1):
-            self.vis.add_geometry(self.item_list[id])
-        for id in range(self.box_id,len(self.item_list)):
-            self.vis.remove_geometry(self.item_list[id])
+        for id in range(0,self.box_id+1):
+            self.vis.add_geometry(self.item_list[id+2])
+        for id in range(self.box_id,len(self.online_items)):
+            self.vis.remove_geometry(self.item_list[id+2])
          
-        print("pre box! id=",self.box_id-2,"/",str(len(self.item_list)-2))
+        print("pre box! id=",self.box_id,"/",len(self.online_items))
     def next_box_callback(self,vis): 
-        self.box_id=((self.box_id+1+len(self.item_list))%len(self.item_list))
-        #skip 2 drawing components
-        if (self.box_id<2):
-            self.box_id+=2
+        self.box_id=((self.box_id+1+len(self.online_items))%len(self.online_items))
+       
         self.vis.clear_geometries()
         self.vis.add_geometry(self.item_list[0])
         self.vis.add_geometry(self.item_list[1])
 
-        for id in range(2,self.box_id+1):
-            self.vis.add_geometry(self.item_list[id])
-        for id in range(self.box_id,len(self.item_list)):
-            self.vis.remove_geometry(self.item_list[id])
+        for id in range(0,self.box_id+1):
+            self.vis.add_geometry(self.item_list[id+2])
+        for id in range(self.box_id,len(self.online_items)):
+            self.vis.remove_geometry(self.item_list[id+2])
          
-        print("next box! id=",self.box_id-2,"/",str(len(self.item_list)-2))
+        print("next box! id=",self.box_id,"/",len(self.online_items))
     def create_mesh_box(self,width, height, depth, dx=0, dy=0, dz=0):
         box = o3d.geometry.TriangleMesh()
         vertices = np.array([[0,0,0],
