@@ -58,9 +58,10 @@ class Online3DPackingDataGenerator:
             item_L =random.randint(self.item_min_dim,self.item_max_dim)
             current_volume+=item_W*item_H*item_L
             self.packer.add_item(Item('Item '+str(index), item_W, item_H, item_L, 0))
-        
+        start=time.time()
         self.packer.pack()
-
+        print("Packing...FINISHED. Time=",time.time()-start)   
+            
         if (len(self.packer.bins)>0):
         #for b in self.packer.bins:
             b=self.packer.bins[0]
@@ -85,7 +86,8 @@ class Online3DPackingDataGenerator:
             #SORT ITEMS BY Z POSITION then by X+Y
             self.online_items=b.items
             for item in self.online_items:
-                item.length, item.width, item.height =item.get_dimension()
+                l,w,h=item.get_dimension()
+                item.length, item.width, item.height = l,w,h
                 item.rotation_type=0
 
             self.online_items.sort(key=lambda x: (x.position[2]+ item.height,x.position[0]+x.position[1]), reverse=False) 
@@ -191,7 +193,7 @@ class Online3DPackingDataGenerator:
     def generate_data_test(self,folder_name=""):
          
         print("generate training data...")
-
+         
     def display_current_result(self):
         #draw bin origin 
         self.item_list=[]

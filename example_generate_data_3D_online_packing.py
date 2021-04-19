@@ -2,7 +2,7 @@
 # Generate dataset for Online-3D Bin Packing
 # prepare training data following 2021 paper: Online 3D Bin Packing with Constrained Deep Reinforcement Learning - Hang Zhao1, Qijin She1, Chenyang Zhu1, Yin Yang2, Kai Xu1
 # Link: https://arxiv.org/pdf/2006.14978.pdf
-# Authors: Loc Nguyen 
+# Authors: Loc Nguyen, Le Thai Son, Nguyen Quoc Viet 
 # Solomon Technology Corp.
 # Copyright - 2021 
 # 
