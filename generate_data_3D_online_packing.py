@@ -15,9 +15,28 @@
 # without the prior written permission of Solomon Technology Corp. 
 #  
 from py3dbp import Online3DPackingDataGenerator
+import os
+
+#working dir
+cur_dir=os.path.abspath(os.getcwd()) 
+print(cur_dir)
+
+#data dir
+data_dir=cur_dir+"/Data" 
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
 #Start a test
-generator=Online3DPackingDataGenerator()
-generator.generate_data()
+generator=Online3DPackingDataGenerator(_working_dir=data_dir,_visual=False)
+
+#=============================================
+#generate data for N samples
+# for i in range(100):
+#     generator.gen_id=i
+#     generator.generate_data_to_files()
+
+#=============================================
 #press "N" or SPACE for Next Packing
 #press "P" for Previous Packing
+#3D visualizer for one case
+generator.generate_data() 
 generator.display_current_result()

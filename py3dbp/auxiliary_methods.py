@@ -14,12 +14,24 @@ def rect_intersect(item1, item2, x, y):
     
     d1 = item1.get_dimension() 
     d2 = item2.get_dimension() 
-    
+
+    if (( (item1.position[y] + d1[y]) <= item2.position[y]  or item1.position[y]  >= (item2.position[y] + d2[y]) or  item1.position[x] >= (item2.position[x] + d2[x]) or item1.position[x] + d1[x] <=  item2.position[x])):
+        return False
+
+    return True 
+
+
     cx1 = item1.position[x] + d1[x]/2 
     cy1 = item1.position[y] + d1[y]/2
     cx2 = item2.position[x] + d2[x]/2 
     cy2 = item2.position[y] + d2[y]/2
+    #bottom1:item1.position[y] + d1[y]
+    #top1:item1.position[y] 
+    #left1:item1.position[x]
+    #right1:item1.position[x] + d1[x]
     
+    #return (not ( (item1.position[y] + d1[y]) >= item2.position[y]  or item1.position[y]  <= (item2.position[y] + d2[y]) or  item1.position[x] >= (item2.position[x] + d2[x]) or item1.position[x] + d1[x] <=  item2.position[x]))
+
     ix = max(cx1, cx2) - min(cx1, cx2) # ix: |cx1-cx2|
     iy = max(cy1, cy2) - min(cy1, cy2) # iy: |cy1-cy2|
     
